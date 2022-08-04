@@ -13,6 +13,8 @@ class ToDo(db.Model):
   todo = db.Column(db.Text())
   created_at = db.Column(db.DateTime)
   updated_at = db.Column(db.DateTime)
+  
+  comments = db.relationship("ToDoComment", backref="todo", lazy='dynamic')
 
   def __init__(self, todo, created_at, updated_at):
     self.todo = todo
@@ -43,3 +45,7 @@ class ToDoComment(db.Model):
 
   def __repr__(self):
     return '<id {}>'.format(self.id)
+  
+  def as_dict(self):
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+  
